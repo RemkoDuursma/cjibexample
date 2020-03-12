@@ -69,8 +69,6 @@ ggplot(park_gr, aes(x = updated, y=parked, col=label)) +
 park_sub2 <- filter(park_gr, label == "P11")
 park_sub2$Date <- as.Date(park_sub2$updated)
 
-library(dplyr)
-library(lubridate)
 park_sub2 <- group_by(park_sub2, wday(Date, label = TRUE), hour(updated))
 
 p11 <- summarize(park_sub2, parked = mean(parked, na.rm=TRUE))
