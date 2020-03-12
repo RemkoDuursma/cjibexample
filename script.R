@@ -1,7 +1,7 @@
 library(mongolite)
 
 
-# Dit duurt even
+# Dit duurt even...
 db <- mongo(collection = "almereparkingjson",
             url = sprintf(
               "mongodb://%s:%s@%s/%s",
