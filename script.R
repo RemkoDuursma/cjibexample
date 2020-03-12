@@ -1,4 +1,4 @@
-library(mongolite)
+
 
 
 # Dit duurt even...
@@ -18,13 +18,8 @@ parking <- read.csv("almere_parking.csv")
 
 
 
-library(randomcoloR)
-
-library(ggplot2)
-library(plotly)
 
 
-library(lubridate)
 
 park <- arrange(parking, updated) %>%
   filter(!label %in% c("P+R","P4") ) %>%
