@@ -71,7 +71,7 @@ ggplot(park_gr, aes(x = updated, y=parked, col=label)) +
 
 
 # gemiddelde per week dag
-park_sub2 <- filter(park_gr, label == "P12")
+park_sub2 <- filter(park_gr, label == "P11")
 park_sub2$Date <- as.Date(park_sub2$updated)
 
 library(dplyr)
@@ -92,8 +92,10 @@ ggplot(p11, aes(x = Uur, y = parked, col = Weekday)) + geom_line(lwd = 1) + them
 
 
 
-# Heat map
-park_ave <- mutate(park_gr, weekday = wday(Date, abbr=FALSE, label = TRUE)) %>%
+# Heat map - uur basis
+park_ave <- mutate(park_gr, 
+                   weekday = wday(Date, abbr=FALSE, label = TRUE),
+                   hour = hour(updated)) %>%
   group_by(hour, weekday) %>%
   summarize(parked_max = max(parked),
             parked_mean = mean(parked)) %>%
@@ -104,10 +106,38 @@ ggplot(park_ave, aes(x = weekday, y = hour, fill = parked_mean)) +
   scale_fill_viridis_c()
 
 
+# Gemiddelde wekelijks verloop per parkeerplaats 
+park_gr$week_time <- (wday(park_gr$updated) - 1) * 24*60 +
+  60*(hour(park_gr$updated)) + minute(park_gr$updated)
+
+park_gr$week_time_15 <- floor(park_gr$week_time / 15)
+
+park_gr_ave <- group_by(park_gr, label, week_time_15) %>%
+  summarize(parked = mean(parked))
+
+ggplot(park_gr_ave, aes(x = week_time_15, y = parked)) +
+  geom_line() +
+  facet_wrap(~label)
+
+
+# Heatmap : wekelijks verloop vs. seizoensverloop
+# Apart per parkeerplaats
+park_gr$week <- week(park_gr$updated)
+park_gr$week_time_30 <- floor(park_gr$week_time / 30)
+park_gr_ave <- group_by(park_gr, label, week, week_time_30) %>%
+  summarize(parked = mean(parked))
+
+filter(park_gr_ave, label == "P11") %>%
+  ggplot(aes(x = week, y = week_time_30, fill = parked)) +
+    geom_tile() +
+    scale_fill_viridis_c()
+
+
 
 
 # Kaart
-k <- read.csv("park.csv", stringsAsFactors = FALSE)
+library(readxl)
+k <- read_excel("park.xlsx")
 
 library(leaflet)
 leaflet(k) %>%
@@ -161,8 +191,28 @@ library(randomForestExplainer)
 plot_predict_interaction(model1, park_hr, "weekday", "hour")
 
 
+# Maak een voorspelling voor het huidige uur
+predict(model1, newdata = data.frame(hour = hour(Sys.time()),
+                                     weekday = wday(Sys.time()),
+                                     label = unique(park_hr$label)))
 
 
+# Een ander model
+library(mgcv)
 
+data <- subset(park_gr, label == "P7")
+
+with(data, plot(week_time, parked, pch="."))
+
+model2 <- gam(parked ~ s(week_time, k=50), data = data)
+
+visreg(model2)
+
+# Voorspelling: nu
+wt <- (wday(Sys.time()) - 1) * 24*60 +
+  60*(hour(Sys.time())) + minute(Sys.time())
+
+predict(model2, newdata = data.frame(week_time = wt))
+points(wt, 9, pch=19,col="red")
 
 
