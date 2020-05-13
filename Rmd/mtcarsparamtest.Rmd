@@ -1,0 +1,26 @@
+---
+title: "mtcars param test"
+author: "Remko"
+date: "12/03/2020"
+output: 
+  html_document:
+    theme: flatly
+params:
+  xaxis: drat
+  yaxis: disp
+---
+
+# Plot
+
+Voor de X as gebruiken we `r params$xaxis`, voor de Y as `r params$yaxis`.
+
+```{r, echo = FALSE}
+plot(mtcars[[params$xaxis]], 
+     mtcars[[params$yaxis]],
+     xlab = params$xaxis,
+     ylab = params$yaxis)
+```
+
+
+
+
