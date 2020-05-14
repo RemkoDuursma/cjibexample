@@ -19,7 +19,8 @@ source("R/read_data.R")
 # 2. Data opschonen
 # --> park
 # --> park_gr
-source("R/clean_data.R")
+# --> park_hr
+source("R/clean_and_prepare_data.R")
 
 
 # Tijd series plotjes
@@ -57,18 +58,9 @@ map_parking_timefilter(park_gr, hr = 12, day = "Saturday")
 
 
 # Model
-park_gr$hour <- hour(park_gr$updated)
-park_hr <- group_by(park_gr, Date, label, hour) %>%
-  summarize(parked = mean(parked)) %>%
-  ungroup %>%
-  mutate(weekday = wday(Date, abbr=FALSE, label = TRUE),
-         weekday = as.integer(factor(weekday, ordered = FALSE)))
-
-write.csv(park_hr, "output/data/park_hourly.csv")
-
-
-
-model1 <- randomForest(parked ~ hour + label + weekday, data = park_hr)
+system.time({
+  model1 <- randomForest(parked ~ hour + label + weekday, data = park_hr)
+})
 
 # summary
 model1

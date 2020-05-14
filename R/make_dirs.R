@@ -7,6 +7,8 @@ mk <- function(dir){
   }
 }
 
+mk("conf")
+mk("output")
 mk("output/data")
 mk("output/figures")
 mk("cache")
