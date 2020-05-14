@@ -1,7 +1,18 @@
+
+# Rstudio project bestanden
 *.Rproj
 .Rproj.user/
 
+# Configuratie folder
 conf/
+
+# Output data
 *.rds
+
+# Tijdelijke output
 cache/
+
+# Output:
+# Dit wordt normaal ook niet meegenomen in git,
+# de outputs moeten opnieuw gemaakt kunnen worden.
 output/
