@@ -7,7 +7,7 @@
 conf/
 
 # Output data
-*.rds
+#*.rds
 
 # Tijdelijke output
 cache/

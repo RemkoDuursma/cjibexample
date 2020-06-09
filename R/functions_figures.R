@@ -1,7 +1,6 @@
 
 park_timeseries_plot <- function(data, begin, end, title = ""){
   
-  
   dplyr::filter(data, 
                 as.Date(updated) > as.Date(begin),
                 as.Date(updated) < as.Date(end)
