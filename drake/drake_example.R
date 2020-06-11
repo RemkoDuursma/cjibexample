@@ -3,7 +3,7 @@ library(drake)
 
 library(dplyr)
 library(ggplot2)
-
+library(randomcoloR)
 
 # Functies
 read_raw_parking_data <- function(file){
@@ -26,7 +26,7 @@ park_timeseries_plot <- function(data, begin, end, title = ""){
   ) %>% 
     ggplot(aes(x = updated, y=parked, col=label)) +
     geom_line() +
-    scale_colour_manual(values = randomColor(nlevels(park$label), "blue")) +
+    scale_colour_manual(values = randomColor(nlevels(data$label), "blue")) +
     theme_bw() +
     labs(title = title)
   
@@ -34,7 +34,7 @@ park_timeseries_plot <- function(data, begin, end, title = ""){
 
 
 plan <- drake_plan(
-  parking_raw = read_raw_parking_data(file_in("data/parking.rds")),
+  parking_raw = read_raw_parking_data(file_in("data/almereparking.rds")),
   parking = clean_parking_data(parking_raw),
   figuur1 = park_timeseries_plot(parking, "2019-10-1", "2019-10-8", title = "Originele data")
 )
@@ -49,6 +49,6 @@ loadd(figuur1)
 figuur1
 
 #
-vis_drake_graph()
+vis_drake_graph(plan)
 
 
