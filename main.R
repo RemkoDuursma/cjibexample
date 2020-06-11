@@ -12,11 +12,8 @@ source("R/utils.R")
 # output, cache folders aanmaken als ze nog niet bestaan
 source("R/make_dirs.R")
 
-# Configuratie
-.conf <- yaml::read_yaml("conf/config.yml")
-
 # 1. Data inlezen
-parking_raw <- read_parking_raw(.conf)
+parking_raw <- read_parking_raw()
 parking_map <- read_parking_map_data()
 
 

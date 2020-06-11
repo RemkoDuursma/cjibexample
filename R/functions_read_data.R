@@ -1,11 +1,16 @@
 
 
 # Lees ruwe data, uit MongoDB of lokale cache.
-read_parking_raw <- function(.conf){
+read_parking_raw <- function(){
   
   # Parkeer data
   fn <- "data/almereparking.rds"
-  if(!file.exists(fn) || !.conf$general$cache){
+  if(!file.exists(fn)){
+    
+    if(!file.exists("conf/config.yml")){
+      stop("YAML met database wachtwoord/username nodig voor downloaden data.")
+    }
+    .conf <- yaml::read_yaml("conf/config.yml")
     
     # Dit duurt even...
     db <- mongo(collection = "almereparkingjson",
