@@ -33,7 +33,7 @@ return(parking)
 
 # Functie om data te lezen voor de kaart.
 read_parking_map_data <- function(){
-  parking_map <- read_excel("data/park.xlsx")  
+  read_excel("data/park.xlsx")  
 }
 
 

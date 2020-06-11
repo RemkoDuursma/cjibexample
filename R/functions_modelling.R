@@ -2,13 +2,14 @@
 # Fit een randomforest model
 fit_model_randomforest <- function(data, form = 1){
   
-  switch(form, 
+  out <- switch(form, 
          `1` = ranger(parked ~ hour + label + weekday, data = data, importance = "impurity"),
          `2` = ranger(parked ~ hour + label, data = data, importance = "impurity")
          )
   
-
+return(out)
 }
+
 
 predict_parking_now <- function(model, where = "P1"){
   
@@ -25,5 +26,5 @@ predict_parking_now <- function(model, where = "P1"){
   
   out_dfr <- dplyr::filter(out_dfr, label %in% where)
   
-  out_dfr  
+return(out_dfr)
 }
