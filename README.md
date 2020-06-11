@@ -12,6 +12,8 @@ Het project is een analyse van het aantal geparkeerde auto's op de parkeerplaats
 
 Het project kan gerund worden met het script `main.R`. Hiervoor zijn een aantal packages nodig, zie hiervoor `R/load_packages.R`. 
 
+Omdat er een `rmarkdown` rapport wordt gemaakt, kun je dit project het beste in Rstudio runnen. Of, installeer een recente versie van Pandoc.
+
 Outputs worden geschreven naar `output/data` en `output/figures`.
 
 ## Contact
