@@ -1,0 +1,84 @@
+---
+title: "Almere Parking - Figuren"
+author: "Remko Duursma"
+date: "6/11/2020"
+output: 
+  html_document:
+    theme: flatly
+    code_folding: hide
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+# Almere parkeerplaatsen
+
+```{r}
+# Kaart
+map_parking_locations(parking_map)
+```
+
+
+# Timeseries
+
+```{r}
+# Tijd series plotjes
+park_timeseries_plot(park, "2019-10-1", "2019-10-8", 
+                     title = "Originele data")
+```
+
+
+```{r}
+park_timeseries_plot(park_gr, "2019-10-1", "2019-10-8",
+                     title = "Gecalibreerde data")
+```
+
+
+```{r}
+# Gemiddelde wekelijks verloop per parkeerplaats 
+weekly_timeseries_plot(park_gr)
+```
+
+
+
+# Gemiddeld aantal geparkeerde auto's per weekdag
+
+```{r}
+# gemiddelde per week dag
+day_week_overlay_plot("P11", park_gr)
+```
+
+
+# Heatmap - uur / weekdag
+
+```{r}
+# Heat map - uur basis
+park_heatmap_hourly(park_gr)
+```
+
+
+# Heatmap - week / seizoen
+
+```{r}
+# Heatmap : wekelijks verloop vs. seizoensverloop
+# Apart per parkeerplaats
+park_heatmap_weekly_seasonal("P11", park_gr)
+```
+
+
+# Lokaties, rood = drukker op zaterdag middag
+
+```{r}
+# Kaart, gekleurd naar aantal auto's
+map_parking_timefilter(park_gr, hr = 12, day = "Saturday")
+```
+
+
+
+
+

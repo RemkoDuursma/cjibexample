@@ -52,11 +52,7 @@ park_heatmap_hourly <- function(data){
 
 weekly_timeseries_plot <- function(data){
   
-  mutate(data,
-         week_time = (wday(updated) - 1) * 24*60 +
-           60*(hour(updated)) + minute(updated),
-         week_time_15 = floor(week_time / 15)) %>% 
-    group_by(label, week_time_15) %>%
+    group_by(data, label, week_time_15) %>%
     summarize(parked = mean(parked)) %>%
     
     ggplot(aes(x = week_time_15, y = parked)) +

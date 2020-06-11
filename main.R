@@ -4,6 +4,10 @@ source("R/load_packages.R")
 
 # Functies laden
 source("R/functions_figures.R")
+source("R/functions_read_data.R")
+source("R/functions_clean_and_prepare_data.R")
+source("R/functions_modelling.R")
+source("R/utils.R")
 
 # output, cache folders aanmaken als ze nog niet bestaan
 source("R/make_dirs.R")
@@ -12,53 +16,40 @@ source("R/make_dirs.R")
 .conf <- yaml::read_yaml("conf/config.yml")
 
 # 1. Data inlezen
-# --> parking, parking_map
-source("R/read_data.R")
+parking_raw <- read_parking_raw(.conf)
+parking_map <- read_parking_map_data()
 
 
-# 2. Data opschonen
-# --> park
-# --> park_gr
-# --> park_hr
-source("R/clean_and_prepare_data.R")
+# 2. Data bewerken
+
+# Originele data, opgeschoond.
+park <- clean_parking_raw(parking_raw, calibrate = FALSE)
+
+# Gecalibreerd.
+park_gr <- clean_parking_raw(parking_raw, calibrate = TRUE)
+
+# Per uur.
+park_hr <- aggregate_parking(park_gr)
 
 
+# 3. Models
 
+# Met dag van de week
+model1 <- fit_model_randomforest(park_hr, form = 1)
 
-# Model
-system.time({
-  model1 <- randomForest(parked ~ hour + label + weekday, data = park_hr)
-})
-
-# summary
-model1
-
-library(randomForestExplainer)
-plot_predict_interaction(model1, park_hr, "weekday", "hour")
-
+# Zonder dag van de week
+model2 <- fit_model_randomforest(park_hr, form = 2)
 
 # Maak een voorspelling voor het huidige uur
-predict(model1, newdata = data.frame(hour = hour(Sys.time()),
-                                     weekday = wday(Sys.time()),
-                                     label = unique(park_hr$label)))
+p_now <- predict_parking_now(model1, where = "P1")
+write.table(p_now, "output/data/voorspelling_nu.txt")
 
 
-# Een ander model
-library(mgcv)
+# 4. Rapport met figuren
+rmarkdown::render("Rmd/almereparking_figuren.Rmd", output_dir = "output/figures")
 
-data <- subset(park_gr, label == "P7")
 
-with(data, plot(week_time, parked, pch="."))
 
-model2 <- gam(parked ~ s(week_time, k=50), data = data)
 
-visreg(model2)
-
-# Voorspelling: nu
-wt <- (wday(Sys.time()) - 1) * 24*60 +
-  60*(hour(Sys.time())) + minute(Sys.time())
-
-predict(model2, newdata = data.frame(week_time = wt))
-points(wt, 9, pch=19,col="red")
 
 

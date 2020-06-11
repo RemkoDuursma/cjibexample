@@ -2,8 +2,7 @@
 
 ## Info
 
-Dit is een voorbeeld project voor een R cursus, met een logische indeling van folders, en een indeling in scripts.
-Dit project is nog in ontwikkeling, en gaat de komende tijd nog verbeterd worden.
+Dit is een voorbeeld project voor een R cursus, met een logische indeling van folders, en een indeling in functies en scripts.
 
 ## Data
 
@@ -13,8 +12,7 @@ Het project is een analyse van het aantal geparkeerde auto's op de parkeerplaats
 
 Het project kan gerund worden met het script `main.R`. Hiervoor zijn een aantal packages nodig, zie hiervoor `R/load_packages.R`. 
 
-(gepland / werkt nog niet:) Output van het project (figuren, rmarkdown rapporten) worden verzameld in `output/`.
-
+Outputs worden geschreven naar `output/data` en `output/figures`.
 
 ## Contact
 

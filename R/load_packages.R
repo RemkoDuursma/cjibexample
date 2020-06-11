@@ -18,6 +18,8 @@ suppressPackageStartupMessages({
   library(leaflet)
     
   library(randomForest)
+  library(ranger)
+  library(randomForestExplainer)
 })
 
 
